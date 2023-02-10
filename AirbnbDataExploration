@@ -1,0 +1,86 @@
+-- Exploratory Data Analysis  
+-------------------------------------------------------------------------------------------------------------------------
+SELECT TOP(20) * FROM AdidasUS
+-------------------------------------------------------------------------------------------------------------------------
+                                                -- TOTAL SALES --
+-------------------------------------------------------------------------------------------------------------------------
+
+-- by MONTH timeline 
+
+-- Total Sales for each month from 2020 to 2021
+    SELECT { fn MONTHNAME(Invoice_Date) } AS Month, 
+    SUM(CASE WHEN YEAR(Invoice_Date) = '2020' THEN Total_Sales ELSE 0 END) AS TotalSales20,
+    SUM(CASE WHEN YEAR(Invoice_Date) = '2021' THEN Total_Sales ELSE 0 END) AS TotalSales21
+    FROM  AdidasUS
+    GROUP BY { fn MONTHNAME(Invoice_Date) }, MONTH(Invoice_Date)
+    order by month(Invoice_Date)
+-------------------------------------------------------------------------------------------------------------------------
+-- by. RETAILER
+-- Total Sales for each retailer in year 2020
+    SELECT 
+        Retailer, 
+        SUM(CASE WHEN YEAR(Invoice_Date) = '2020' THEN Total_Sales ELSE 0 END) AS TotalSalesRetailer20,
+        SUM(CASE WHEN YEAR(Invoice_Date) = '2021' THEN Total_Sales ELSE 0 END) AS TotalSalesRetailer21
+    FROM AdidasUS
+    GROUP BY Retailer
+    ORDER BY Retailer
+
+-------------------------------------------------------------------------------------------------------------------------
+-- by REGION
+-- Total Sales for each REGION 
+    SELECT 
+        Region
+        ,SUM(CASE WHEN YEAR(Invoice_Date) = '2020' THEN Total_Sales ELSE 0 END) AS TotalSalesRegion20
+        ,SUM(CASE WHEN YEAR(Invoice_Date) = '2021' THEN Total_Sales ELSE 0 END) AS TotalSalesRegion21
+    FROM AdidasUS
+    GROUP BY Region
+
+-------------------------------------------------------------------------------------------------------------------------
+-- by STATE
+
+-- Total Sales for each state
+
+    SELECT 
+        State
+        ,SUM(CASE WHEN YEAR(Invoice_Date) = '2020' THEN Total_Sales ELSE 0 END) AS TotalSalesState20
+        ,SUM(CASE WHEN YEAR(Invoice_Date) = '2021' THEN Total_Sales ELSE 0 END) AS TotalSalesState21
+    FROM AdidasUS
+    GROUP BY State
+    ORDER BY State
+-------------------------------------------------------------------------------------------------------------------------
+-- by Product
+
+-- Total Sales for each product
+    SELECT Product
+        ,SUM(CASE WHEN YEAR(Invoice_Date) = '2020' THEN Total_Sales ELSE 0 END) AS TotalSalesProduct20
+        ,SUM(CASE WHEN YEAR(Invoice_Date) = '2021' THEN Total_Sales ELSE 0 END) AS TotalSalesProduct21
+    FROM AdidasUS
+    GROUP BY Product
+    ORDER BY Product
+-------------------------------------------------------------------------------------------------------------------------
+-- by Sales_Method
+
+-- Total Sales for each product
+    SELECT Sales_Method
+        ,SUM(CASE WHEN YEAR(Invoice_Date) = '2020' THEN Total_Sales ELSE 0 END) AS TotalSales_Method20
+        ,SUM(CASE WHEN YEAR(Invoice_Date) = '2021' THEN Total_Sales ELSE 0 END) AS TotalSales_Method21
+    FROM AdidasUS
+    GROUP BY Sales_Method
+    ORDER BY Sales_Method
+-------------------------------------------------------------------------------------------------------------------------
+                                               -- UNIT SOLD
+-------------------------------------------------------------------------------------------------------------------------
+-- by Product
+-- Remove ',' in Unit_Sold 
+        UPDATE AdidasUS
+        SET Units_Sold = CAST(SUBSTRING (Units_Sold,1, 1) AS int)
+        WHERE Units_Sold LIKE '%,%'
+ SELECT Product
+        ,SUM(CASE WHEN YEAR(Invoice_Date) = '2020' THEN Convert(INT, Units_Sold) ELSE 0 END) AS Units_Sold20
+        ,SUM(CASE WHEN YEAR(Invoice_Date) = '2021' THEN Convert(INT,Units_Sold) ELSE 0 END) AS Units_Sold21
+    FROM AdidasUS
+    GROUP BY Product
+    ORDER BY Product
+-------------------------------------------------------------------------------------------------------------------------
+SELECT TOP(20) * FROM AdidasUS
+-------------------------------------------------------------------------------------------------------------------------
